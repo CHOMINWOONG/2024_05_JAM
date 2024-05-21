@@ -1,0 +1,10 @@
+package com.koreaIT.JAM.dto;
+
+public class Article {
+	String title;
+	String body;
+	
+	public Article(String title, String body) {
+		
+	}
+}

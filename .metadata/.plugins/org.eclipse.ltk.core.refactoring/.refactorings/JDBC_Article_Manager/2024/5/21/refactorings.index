@@ -4,3 +4,6 @@
 1716270138621	Delete element
 1716270998684	Move compilation unit
 1716271039128	Rename package 'test'
+1716271828022	Rename compilation unit 'JDBCConnectorTest.java'
+1716273057473	Delete element
+1716273352451	Rename compilation unit 'JDBCInsertTest.java'
