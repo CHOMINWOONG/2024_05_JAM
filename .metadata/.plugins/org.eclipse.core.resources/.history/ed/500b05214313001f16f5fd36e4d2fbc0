@@ -1,0 +1,5 @@
+package com.koearIT.BAM.service;
+
+public class ArticleService {
+
+}

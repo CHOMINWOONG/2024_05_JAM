@@ -1,0 +1,16 @@
+package com.koreaIT.BAM.service;
+
+import com.koreaIT.BAM.dao.ArticleDao;
+
+public class ArticleService {
+	
+	private ArticleDao articledao;
+	
+	public ArticleService() {
+		this.articledao = new ArticleDao();
+	}
+	
+	public int writeArticle() {
+		
+	}
+}

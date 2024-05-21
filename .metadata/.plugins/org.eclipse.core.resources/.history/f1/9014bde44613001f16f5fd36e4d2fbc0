@@ -1,0 +1,11 @@
+package com.koreaIT.BAM.dao;
+
+import java.util.List;
+
+import com.koreaIT.dto.Article;
+
+public class ArticleDao {
+	
+	private List<Article> articles;
+	public int lastId = 1;
+}

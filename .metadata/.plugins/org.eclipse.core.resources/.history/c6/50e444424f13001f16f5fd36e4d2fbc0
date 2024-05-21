@@ -1,0 +1,28 @@
+package com.koreaIT.BAM.service;
+
+import com.koreaIT.BAM.dao.MemberDao;
+import com.koreaIT.dto.Member;
+
+public class MemberService {
+	
+	private MemberDao memberdao;
+	
+	public MemberService() {
+		this.memberdao = new MemberDao();		
+	}
+	
+	public boolean loginIdDupChk(String loginId) {
+		return memberdao.loginIdDupChk(loginId);
+	}
+	
+	public void joinMember(String loginId, String loginPw, String name) {
+		memberdao.joinMember(loginId, loginPw, name);
+	}
+	
+	public Member getMemberByLoginId(String loginId) {
+		return memberdao.getMemberByLoginId(loginId);
+		
+	}
+	
+	
+}

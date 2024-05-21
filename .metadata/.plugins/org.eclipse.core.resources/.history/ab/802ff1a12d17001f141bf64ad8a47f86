@@ -1,0 +1,36 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		
+		Scanner sc= new Scanner(System.in); 
+		
+		System.out.println("== 프로그램 시작 ==");
+		System.out.printf("명령어) ");
+		String cmd = sc.nextLine().trim();
+		while(true) {
+			
+			
+			
+			if(cmd.equals("article write")) {
+				
+				System.out.printf("제목 :");
+				String title = sc.next().trim();
+				System.out.printf("내용 :");
+				String body = sc.next().trim();
+				
+				System.out.println("1번 게시물이 작성되었습니다.");
+				break;				
+			}
+				if(cmd.equals("article list")) {
+					
+					System.out.println("번호  |  제목");
+					System.out.println("2  |  ~~~");
+					System.out.println("1  |  ~~~");				
+				continue;
+			}
+
+		}
+		
+	}
+}

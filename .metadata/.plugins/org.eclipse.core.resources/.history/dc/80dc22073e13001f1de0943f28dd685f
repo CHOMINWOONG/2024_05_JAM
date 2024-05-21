@@ -1,0 +1,5 @@
+package com.koreaIT.BAM.service;
+
+public class ArticleService {
+
+}
