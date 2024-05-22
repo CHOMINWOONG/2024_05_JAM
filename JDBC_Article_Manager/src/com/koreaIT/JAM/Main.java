@@ -27,6 +27,8 @@ public class Main {
 		
 		while(true) {
 			
+			List<Article> articles = new ArrayList<>();
+			
 			System.out.printf("명령어) ");
 			String cmd = sc.nextLine().trim();
 			
@@ -85,7 +87,7 @@ public class Main {
 			}
 				if(cmd.equals("article list")) {
 					
-					List<Article> articles = new ArrayList<>();
+					
 					Connection connection = null;
 			    	PreparedStatement pstmt = null;
 			    	ResultSet rs = null;
@@ -139,7 +141,53 @@ public class Main {
 			        
 			        
 				continue;
-			}
+			} else if (cmd.startsWith("article modify")) {
+				
+					int id = Integer.parseInt(cmd.split(" ")[2]);
+					
+					System.out.printf("수정할 제목 ");
+					String title = sc.nextLine().trim();
+					System.out.printf("수정할 내용 ");
+					String body = sc.nextLine().trim();
+					
+					Connection connection = null;
+			    	PreparedStatement pstmt = null;
+			    	
+					try {
+			            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+
+			            String sql = "UPDATE article";
+			            sql += ", updateDate = NOW()";
+			            sql += ", title = '" + title + "'";
+			            sql += ", `body` = '" + body + "';";
+			            sql += "WHERE id = " + id + ";";
+			            
+			            pstmt = connection.prepareStatement(sql);
+			            pstmt.executeUpdate();
+
+			        } catch (SQLException e) {
+			            e.printStackTrace();
+			        } finally {
+			            if (pstmt != null) {
+			                try {
+			                	pstmt.close();
+			                } catch (SQLException e) {
+			                    e.printStackTrace();
+			                }
+			            }
+			            if (connection != null) {
+			            	try {
+			            		connection.close();
+			            	} catch (SQLException e) {
+			            		e.printStackTrace();
+			            	}
+			            }
+			        }
+					
+					System.out.println(id + "번 게시물이 수정되었습니다");
+					
+				}
+				
 				
 				
 				sc.close();
