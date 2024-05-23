@@ -7,9 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import com.koreaIT.JAM.dto.Article;
+import com.koreaIT.JAM.util.DBUtil;
+import com.koreaIT.JAM.util.SecSql;
 
 public class App {
 
@@ -48,68 +51,57 @@ public class App {
 					System.out.printf("내용 : ");
 					String body = sc.nextLine();
 
-			        try {
-			            String sql = "INSERT INTO article";
-			            sql += " SET regDate = NOW()";
-			            sql += ", updateDate = NOW()";
-			            sql += ", title = '" + title + "'";
-			            sql += ", `body` = '" + body + "';";
+			        	
+			        SecSql sql = new SecSql();
+			        sql.append("INSERT INTO article");
+			        sql.append("SET regDate = NOW()");
+			        sql.append(", updateDate = NOW()");
+			        sql.append(", title = ?", title);
+			        sql.append(", body = ?", body);
+			        	
+			        	
+//			            String sql = "INSERT INTO article";
+//			            sql += " SET regDate = NOW()";
+//			            sql += ", updateDate = NOW()";
+//			            sql += ", title = '" + title + "'";
+//			            sql += ", `body` = '" + body + "';";
 
-			            pstmt = connection.prepareStatement(sql);
-			            pstmt.executeUpdate();
+//			            pstmt = connection.prepareStatement(sql);
+//			            pstmt.executeUpdate();
 
-			        } catch (SQLException e) {
-			            e.printStackTrace();
-			        }
+			        
 
 					System.out.printf("%d번 게시물이 작성되었습니다\n", lastArticleId);
 
 					lastArticleId++;
+					
 				} else if (cmd.equals("article list")) {
 					System.out.println("== 게시물 목록 ==");
 
 			    	ResultSet rs = null;
 
 			    	List<Article> articles = new ArrayList<>();
-
-			        try {
-			            String sql = "SELECT * FROM article";
-			            sql += " ORDER BY id DESC;";
-
-			            pstmt = connection.prepareStatement(sql);
-			            rs = pstmt.executeQuery();
-
-			            while (rs.next()) {
-			            	int id = rs.getInt("id");
-			            	String regDate = rs.getString("regDate");
-			            	String updateDate = rs.getString("updateDate");
-			            	String title = rs.getString("title");
-			            	String body = rs.getString("body");
-
-			            	Article article = new Article(id, regDate, updateDate, title, body);
-			            	articles.add(article);
-			            }
-
-			        } catch (SQLException e) {
-			            e.printStackTrace();
-			        } finally {
-			        	if (rs != null) {
-			        		try {
-			        			rs.close();
-			        		} catch (SQLException e) {
-			        			e.printStackTrace();
-			        		}
-			        	}
-			        }
-
+			    	
+			    	SecSql sql = new SecSql();
+			    	sql.append("SELECT * FROM article");
+			    	sql.append("ORDER BY id DESC");
+			    	
+			    	List<Map<String, Object>> articleListMap = DBUtil.selectRows(connection, sql);
+			    	
+			    	for (Map<String, Object> articleMap : articleListMap ) {
+			    		articles.add(new Article(articleMap));
+			    	}
+			    	
 					if (articles.size() == 0) {
 						System.out.println("게시물이 존재하지 않습니다");
 						continue;
 					}
-
-					System.out.println("번호	|	제목");
+					
+					System.out.println("=== 게시물 목록 ===");
+					System.out.println("번호|	제목  |         작성일        ");
+					
 					for (Article article : articles) {
-						System.out.printf("%d	|	%s\n", article.id, article.title);
+						System.out.printf("%d   |   %s   |   %s   \n", article.id, article.title, article.regDate);
 					}
 
 				} else if (cmd.startsWith("article modify ")) {
