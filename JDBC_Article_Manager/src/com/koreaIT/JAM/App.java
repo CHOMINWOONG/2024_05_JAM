@@ -41,9 +41,90 @@ public class App {
 
 				if (cmd.equals("exit")) {
 					break;
-				}
-
-				if (cmd.equals("article write")) {
+				} if (cmd.equals("member join ")) {
+					String loginId = null;
+					String loginPw = null;
+					String loginPwChk = null;
+					String name = null;
+					
+					while (true) {
+						System.out.println("아이디 : ");
+						loginId = sc.nextLine().trim();
+						
+						if (loginId.length() == 0) {
+							System.out.println("아이디는 필수 입력 정보입니다");
+							continue;
+						}
+						
+						SecSql sql = new SecSql();
+				    	sql.append("SELECT COUNT(id) > 0"); 
+				    	sql.append("FROM member");
+				    	sql.append("WHERE loginId = ?", loginId);
+				    	
+				    	boolean isLoginIdDup = DBUtil.selectRowBooleanValue(connection, sql);
+				    	
+				    	if (isLoginIdDup) {
+				    		System.out.println("[%s]는(은) 이미 사용중입니다");
+				    		continue;
+				    	}
+				    	
+						break;
+					}
+					
+					while (true) {
+						System.out.println("비밀번호 : ");
+						loginPw = sc.nextLine().trim();
+						
+						if (loginPw.length() == 0) {
+							System.out.println("비밀번호는 필수 입력 정보입니다");
+							continue;
+						}
+						
+						System.out.println("비밀번호 확인 : ");
+						loginPwChk = sc.nextLine().trim();
+						
+						if (loginPwChk.length() == 0) {
+							System.out.println("비밀번호는 필수 입력 정보입니다");
+							continue;
+						}
+						break;
+					}
+					
+					while (true) {
+						System.out.println("이름 : ");
+						name = sc.nextLine().trim();
+						
+						if (name.length() == 0) {
+							System.out.println("이름은 필수 입력 정보입니다");
+							continue;
+						}
+						break;
+					}
+					
+//					SecSql sql = new SecSql();
+//					sql.append("CREATE TABLE `member`");
+//					sql.append("id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT");
+//					sql.append(",regDate DATETIME NOT NULL");
+//					sql.append(",updateDate DATETIME NOT NULL");
+//					sql.append(",loginId VARCHAR(20)");
+//					sql.append(",loginPw VARCHAR(100)");
+//					sql.append(",`name` VARCHAR(20)");
+					
+					
+					SecSql sql = new SecSql();
+			        sql.append("INSERT INTO article");
+			        sql.append("SET regDate = NOW()");
+			        sql.append(", updateDate = NOW()");
+			        sql.append(", loginId = ?", loginId);
+			        sql.append(", loginPw = ?", loginPw);
+			        sql.append(", `name` = ?", name);
+			        
+			        DBUtil.insert(connection, sql);
+			        
+			        System.out.printf("[%s]님의 가입을 환영합니다 !\n", loginId);
+					
+					
+				} if (cmd.equals("article write")) {
 					System.out.println("== 게시물 작성 ==");
 
 					System.out.printf("제목 : ");
@@ -59,15 +140,6 @@ public class App {
 			        sql.append(", title = ?", title);
 			        sql.append(", body = ?", body);
 			        	
-			        	
-//			            String sql = "INSERT INTO article";
-//			            sql += " SET regDate = NOW()";
-//			            sql += ", updateDate = NOW()";
-//			            sql += ", title = '" + title + "'";
-//			            sql += ", `body` = '" + body + "';";
-
-//			            pstmt = connection.prepareStatement(sql);
-//			            pstmt.executeUpdate();
 			        int id = DBUtil.insert(connection, sql);
 			        
 			        
@@ -190,7 +262,8 @@ public class App {
 			    	
 			    	System.out.printf("%d번 게시물이 삭제되었습니다\n", id);
 
-				}
+				} 
+				
 				
 			}
 		} catch (SQLException e) {
