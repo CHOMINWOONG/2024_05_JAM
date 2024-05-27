@@ -58,7 +58,9 @@ public class App {
 					break;
 				} if (cmd.equals("member join")) {
 					memberController.doJoin();
-				} if (cmd.equals("article write")) {
+				} if (cmd.equals("member login")) {
+					memberController.doLogin();
+;				} if (cmd.equals("article write")) {
 					articleController.doWrite();					
 				} else if (cmd.equals("article list")) {
 					articleController.showList();
