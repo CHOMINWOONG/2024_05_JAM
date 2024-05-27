@@ -1,13 +1,10 @@
 package com.koreaIT.controller;
 
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import com.koreaIT.JAM.dto.Member;
-import com.koreaIT.JAM.util.DBUtil;
-import com.koreaIT.JAM.util.SecSql;
+import com.koreaIT.JAM.session.Session;
 import com.koreaIT.service.MemberService;
 
 public class MemberController {
@@ -23,6 +20,11 @@ public class MemberController {
 	}
 	
 	public void doJoin() {
+		if (Session.isLogined()) {
+			System.out.println("로그아웃 후 이용해주세요");
+			return;
+		}
+		
 		String loginId = null;
 		String loginPw = null;
 		String loginPwChk = null;
@@ -96,8 +98,15 @@ public class MemberController {
 	}
 	
 	public void doLogin() {
+		
+		if (Session.isLogined()) {
+			System.out.println("로그아웃 후 이용해주세요");
+			return;
+		}
+		
 		String loginId = null;
 		String loginPw = null;
+		Member member = null;
 		
 		System.out.println("== 로그인 ==");
 		
@@ -116,7 +125,7 @@ public class MemberController {
 				continue;
 			}
 			
-			Member member = memberService.getMemberBuLoginId(loginId);
+			member = memberService.getMemberBuLoginId(loginId);
 			
 			if (member == null) {
 				System.out.println("[ %s ] 은(는) 존재하지않는 아이디입니다");
@@ -128,6 +137,18 @@ public class MemberController {
 			}
 			break;
 		}
+		Session.login(member.id);
+		
 		System.out.printf("[ %s ]님 환영합니다\n", loginId);
+	}
+	public void doLogout() {
+		if (Session.isLogined() == false) {
+			System.out.println("로그인 후 이용해주세요");
+			return;
+		}
+		
+		System.out.println("정상적으로 로그아웃 되었습니다");
+		Session.logout();
+		
 	}
 }

@@ -1,8 +1,22 @@
 package com.koreaIT.JAM.session;
 
-import com.koreaIT.JAM.dto.Member;
 
 public class Session {
 	public static int loginedMemberId;
-	public static Member loginedMember;
+	
+	static {
+		loginedMemberId = -1;
+	}
+	
+	public static void login(int id) {
+		loginedMemberId = id;
+	}
+	
+	public static void logout() {
+		loginedMemberId = -1;
+	}
+	
+	public static boolean isLogined() {
+		return loginedMemberId != -1;
+	}
 }
