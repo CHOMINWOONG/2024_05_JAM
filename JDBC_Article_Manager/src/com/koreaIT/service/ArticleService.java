@@ -1,6 +1,8 @@
 package com.koreaIT.service;
 
 import java.sql.Connection;
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +18,12 @@ public class ArticleService {
 		this.articleDao = new ArticleDao(connection);
 	}
 	
-	public int doWrite(String title, String body) {
-		return articleDao.doWrite(title, body);
+	public int doWrite(int loginMemberId, String title, String body) {
+		return articleDao.doWrite(loginMemberId, title, body);
 	}
 	
-	public List<Article> showList() {
-		List<Map<String, Object>> articleListMap = articleDao.showList();
+	public List<Article> showList(String searchKeyword) {
+		List<Map<String, Object>> articleListMap = articleDao.showList(searchKeyword);
 		
 		List<Article> articles = new ArrayList<>();
 		
@@ -48,5 +50,32 @@ public class ArticleService {
 	public void doModify(int id, String title, String body) {
 		articleDao.doModify(id, title, body);
 	}
+
+	public int getCmdNum(String cmd) {
+		int id = 0;
+		
+		try {
+			id = Integer.parseInt(cmd.split(" ")[2]);
+		} catch (Exception e) {
+			return -1;
+		}
+		
+		return id;
+	}
+
+	public Article getArticleById(int id) {
+		Map<String, Object> articleMap = articleDao.getArticleById(id);
+		
+		if (articleMap.isEmpty()) {
+			return null;
+		}
+		return new Article(articleMap);
+	}
+	
+	public int increaseVCnt(int id) {
+		return articleDao.increaseVCnt(id);
+	}
+
+	
 	
 }

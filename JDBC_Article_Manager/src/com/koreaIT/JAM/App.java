@@ -60,10 +60,12 @@ public class App {
 					memberController.doJoin();
 				} if (cmd.equals("member login")) {
 					memberController.doLogin();
-;				} if (cmd.equals("article write")) {
+				} if (cmd.equals("member logout")) {
+					memberController.doLogout();
+				} if (cmd.equals("article write")) {
 					articleController.doWrite();					
-				} else if (cmd.equals("article list")) {
-					articleController.showList();
+				} else if (cmd.startsWith("article list")) {
+					articleController.showList(cmd);
 				} else if (cmd.startsWith("article modify ")) {
 					articleController.doModify(cmd);
 				} else if (cmd.startsWith("article detail ")) {
